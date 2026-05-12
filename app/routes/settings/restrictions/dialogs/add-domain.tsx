@@ -62,7 +62,6 @@ export default function AddDomain({ domains, isDisabled }: AddDomainProps) {
           placeholder="example.com"
         />
       </DialogPanel>
-      </DialogPanel>
     </Dialog>
   );
 }

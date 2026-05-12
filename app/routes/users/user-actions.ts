@@ -55,6 +55,12 @@ export async function userAction({ request, context }: Route.ActionArgs) {
   const api = context.hsApi.getRuntimeClient(apiKey);
   switch (action) {
     case "create_user": {
+      if (context.oidc) {
+        throw data("Headscale users must be created through OIDC when OIDC is enabled.", {
+          status: 403,
+        });
+      }
+
       const name = formData.get("username")?.toString();
       const displayName = formData.get("display_name")?.toString();
       const email = formData.get("email")?.toString();

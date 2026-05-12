@@ -6,7 +6,7 @@ import cn from "~/utils/cn";
 import CreateUser from "../dialogs/create-user";
 
 interface ManageBannerProps {
-  oidc?: { issuer: string };
+  oidc?: { issuer: string; loginServer: string };
   isDisabled?: boolean;
 }
 
@@ -27,7 +27,11 @@ export default function ManageBanner({ oidc, isDisabled }: ManageBannerProps) {
               <Link external styled to={oidc.issuer}>
                 OIDC 提供商
               </Link>
-              管理。
+              管理。请让用户运行{" "}
+              <code className="rounded bg-mist-100 px-1.5 py-0.5 text-xs dark:bg-mist-800">
+                tailscale up --login-server={oidc.loginServer}
+              </code>{" "}
+              完成 Headscale OIDC 注册登录。
             </>
           ) : (
             <>
@@ -39,7 +43,7 @@ export default function ManageBanner({ oidc, isDisabled }: ManageBannerProps) {
           )}
         </p>
       </div>
-      <CreateUser isDisabled={isDisabled} isOidc={oidc !== undefined} />
+      {!oidc && <CreateUser isDisabled={isDisabled} />}
     </div>
   );
 }

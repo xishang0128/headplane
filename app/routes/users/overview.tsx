@@ -138,7 +138,12 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     writable: writablePermission,
     currentUserId: principal.kind === "oidc" ? principal.user.id : undefined,
     isOwner,
-    oidc: context.config.oidc ? { issuer: context.config.oidc.issuer } : undefined,
+    oidc: context.config.oidc
+      ? {
+          issuer: context.config.oidc.issuer,
+          loginServer: context.config.headscale.public_url ?? context.config.headscale.url,
+        }
+      : undefined,
     magic,
     apiError,
     headplaneUsers,

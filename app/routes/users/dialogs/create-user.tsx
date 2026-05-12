@@ -5,19 +5,18 @@ import Text from "~/components/text";
 import Title from "~/components/title";
 
 interface CreateUserProps {
-  isOidc?: boolean;
   isDisabled?: boolean;
 }
 
-export default function CreateUser({ isOidc, isDisabled }: CreateUserProps) {
+export default function CreateUser({ isDisabled }: CreateUserProps) {
   return (
     <Dialog>
-      <Button disabled={isDisabled}>添加用户</Button>
+      <Button disabled={isDisabled}>添加 Headscale 用户</Button>
       <DialogPanel>
         <Title>创建 Headscale 用户</Title>
         <Text className="mb-6">
-          这将在 Headscale 中创建新用户。该用户将显示在“未关联的 Headscale 用户”部分，直到其
-          {isOidc ? "通过您的 OIDC 提供商" : ""}登录并自动关联到 Headplane 账户。
+          这将在 Headscale 中创建新用户。该用户将显示在“未关联的 Headscale 用户”部分，直到其关联到
+          Headplane 账户。
         </Text>
         <input name="action_id" type="hidden" value="create_user" />
         <div className="flex flex-col gap-4">

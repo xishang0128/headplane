@@ -6,15 +6,23 @@ import type { RuntimeApiClient } from "~/server/headscale/api/endpoints";
 import log from "~/utils/log";
 
 import { Integration } from "./abstract";
-import { findHeadscaleServe, signalAndWaitHealthy } from "./proc-helper";
+import {
+  findHeadscaleServe,
+  signalAndWaitHealthy,
+  systemdRestartAndWaitHealthy,
+} from "./proc-helper";
 
 const configSchema = {
   full: type({
     enabled: "boolean",
+    restart_method: '"systemd" | "signal" = "systemd"',
+    systemd_service: 'string = "headscale.service"',
   }),
 
   partial: type({
     enabled: "boolean?",
+    restart_method: '"systemd" | "signal"?',
+    systemd_service: "string?",
   }).partial(),
 };
 
@@ -52,9 +60,17 @@ export default class ProcIntegration extends Integration<typeof configSchema.ful
   }
 
   async onConfigChange(client: RuntimeApiClient) {
-    if (!this.pid) {
+    if (this.context.restart_method === "systemd") {
+      const restarted = await systemdRestartAndWaitHealthy(client, {
+        service: this.context.systemd_service,
+      });
+      if (restarted) {
+        this.pid = await findHeadscaleServe();
+      }
       return;
     }
+
+    if (!this.pid) return;
 
     await signalAndWaitHealthy(client, {
       pid: this.pid,

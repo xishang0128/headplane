@@ -119,11 +119,18 @@ Headplane and Headscale both run on the same machine because Headplane needs
 Enabling network management is as simple as setting a few additional fields in
 your Headplane configuration file:
 
-| Field                          | Description                                                                                                                    |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
-| **`integration.proc.enabled`** | Set to `true` to enable process inspection.                                                                                    |
-| **`headscale.config_path`**    | Path to your Head**scale** configuration file (e.g., `/etc/headscale/config.yaml`).                                            |
-| `headscale.dns_records_path`   | _Optional_. Refer to the [example configuration](https://github.com/tale/headplane/blob/main/config.example.yaml) for details. |
+| Field                              | Description                                                                                                                    |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| **`integration.proc.enabled`**     | Set to `true` to enable process inspection.                                                                                    |
+| `integration.proc.restart_method`  | How Headplane applies Headscale config changes. Defaults to `systemd`; set to `signal` to send `SIGHUP` instead.               |
+| `integration.proc.systemd_service` | systemd service to restart when `restart_method` is `systemd`. Defaults to `headscale.service`.                                |
+| **`headscale.config_path`**        | Path to your Head**scale** configuration file (e.g., `/etc/headscale/config.yaml`).                                            |
+| `headscale.dns_records_path`       | _Optional_. Refer to the [example configuration](https://github.com/tale/headplane/blob/main/config.example.yaml) for details. |
+
+When using the default `systemd` restart method, ensure the Headplane service
+user can run `systemctl restart headscale.service`. If you use `signal`,
+Headplane sends `SIGHUP`, which Headscale may only apply to reloadable config
+sections such as ACL policy.
 
 With these settings in place, restart Headplane. You should now see additional
 options in the UI navbar such as "DNS" and "Settings" where you can manage your

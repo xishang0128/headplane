@@ -1,3 +1,4 @@
+import { spawn } from "node:child_process";
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { kill } from "node:process";
@@ -98,7 +99,77 @@ export async function signalAndWaitHealthy(
     try {
       const healthy = await client.isHealthy();
       if (healthy) {
-        log.info("config", "Headscale is healthy after restart");
+        log.info("config", "Headscale is healthy after %s", signal);
+        return true;
+      }
+    } catch {
+      // Still restarting
+    }
+
+    if (attempt < maxAttempts) {
+      await setTimeout(retryDelayMs);
+    }
+  }
+
+  log.error("config", "Headscale did not become healthy after %d attempts", maxAttempts);
+  return false;
+}
+
+export interface SystemdRestartOptions {
+  service: string;
+  maxAttempts?: number;
+  retryDelayMs?: number;
+}
+
+export async function systemdRestartAndWaitHealthy(
+  client: RuntimeApiClient,
+  options: SystemdRestartOptions,
+): Promise<boolean> {
+  const { service, maxAttempts = 30, retryDelayMs = 1000 } = options;
+
+  const restarted = await new Promise<boolean>((resolve) => {
+    const child = spawn("systemctl", ["restart", service], {
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    let stderr = "";
+
+    child.stderr.on("data", (chunk) => {
+      stderr += String(chunk);
+    });
+
+    child.on("error", (error) => {
+      log.error("config", "Failed to start systemctl restart %s: %s", service, error.message);
+      resolve(false);
+    });
+
+    child.on("close", (code) => {
+      if (code === 0) {
+        log.info("config", "Restarted Headscale via systemd service %s", service);
+        resolve(true);
+        return;
+      }
+
+      log.error(
+        "config",
+        "systemctl restart %s failed with exit code %d: %s",
+        service,
+        code,
+        stderr.trim(),
+      );
+      resolve(false);
+    });
+  });
+
+  if (!restarted) {
+    return false;
+  }
+
+  await setTimeout(retryDelayMs);
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const healthy = await client.isHealthy();
+      if (healthy) {
+        log.info("config", "Headscale is healthy after systemd restart");
         return true;
       }
     } catch {

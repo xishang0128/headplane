@@ -154,13 +154,14 @@ integration:
     pod_name: "headscale"
 
   # Proc is the "Native" integration that only works when Headscale and
-  # Headplane are running outside of a container. There is no configuration,
-  # but you need to ensure that the Headplane process can terminate the
-  # Headscale process.
+  # Headplane are running outside of a container. By default, Headplane
+  # restarts Headscale through systemd when it changes Headscale config.
   #
-  # (If they are both running under systemd as sudo, this will work).
+  # Ensure the Headplane process can run `systemctl restart headscale.service`.
   proc:
     enabled: false
+    restart_method: systemd
+    systemd_service: headscale.service
 
 # OIDC Configuration for simpler authentication
 # (This is optional, but recommended for the best experience)

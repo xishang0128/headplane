@@ -21,7 +21,7 @@ export default function CodeBlock({ children, className }: CodeBlockProps) {
       )}
       onClick={async () => {
         await navigator.clipboard.writeText(text);
-        toast("Copied to clipboard");
+        toast("已复制到剪贴板");
       }}
     >
       <code className="block px-3 pt-2 pb-1 text-sm break-all">{text}</code>

@@ -20,10 +20,9 @@ export function getErrorMessage(error: Error | unknown): {
           jsxMessage: (
             <>
               <Card.Text>
-                There was an error communicating with the Headscale API.
+                与 Headscale API 通信时出错。
                 <br />
-                The server responded with a status code of <strong>{statusCode}</strong>, indicating
-                a server-side issue. Please check the Headscale server status and try again later.
+                服务器返回了状态码 <strong>{statusCode}</strong>，表明服务器端出现问题。请检查 Headscale 服务器状态并稍后重试。
               </Card.Text>
               {(error.data.data != null || error.data.rawData != null) && (
                 <pre className="mt-2 overflow-x-auto rounded-lg bg-mist-100 p-2 dark:bg-mist-800">
@@ -36,7 +35,7 @@ export function getErrorMessage(error: Error | unknown): {
               )}
             </>
           ),
-          title: "Headscale API Error",
+          title: "Headscale API 错误",
         };
       }
 
@@ -46,23 +45,22 @@ export function getErrorMessage(error: Error | unknown): {
         jsxMessage: (
           <>
             <Card.Text className="leading-snug">
-              The Headscale API returned an unexpected response.
+              Headscale API 返回了意外的响应。
               {authError ? (
                 <>
                   {" "}
-                  The status code indicates an authentication error. Please verify your API key and
-                  Headplane configuration.
+                  状态码表明认证错误。请验证您的 API 密钥和 Headplane 配置。
                 </>
               ) : (
-                <> You may be using an unsupported version of Headscale or this may be a bug.</>
+                <> 您可能使用了不支持的 Headscale 版本，或这可能是一个 Bug。</>
               )}
             </Card.Text>
             <ul className="mt-2 list-inside list-disc">
               <li>
-                Request URL: <Code>{requestUrl}</Code>
+                请求 URL: <Code>{requestUrl}</Code>
               </li>
               <li>
-                Status Code:{" "}
+                状态码:{" "}
                 <Code>
                   {/* @ts-expect-error */}
                   {data === null ? (
@@ -77,13 +75,13 @@ export function getErrorMessage(error: Error | unknown): {
                 </Code>
               </li>
             </ul>
-            <Card.Text className="mt-4 text-lg font-semibold">Error Details</Card.Text>
+            <Card.Text className="mt-4 text-lg font-semibold">错误详情</Card.Text>
             <pre className="mt-2 overflow-x-auto rounded-lg bg-mist-100 p-2 dark:bg-mist-800">
               <code>{JSON.stringify(error.data, null, 2)}</code>
             </pre>
           </>
         ),
-        title: "Invalid response from Headscale API",
+        title: "Headscale API 响应无效",
       };
     }
 
@@ -93,10 +91,9 @@ export function getErrorMessage(error: Error | unknown): {
         jsxMessage: (
           <>
             <Card.Text className="leading-snug">
-              Headplane was unable to reach the Headscale API. Please check your network setup and
-              configuration to ensure Headplane is able to connect.
+              Headplane 无法达到 Headscale API。请检查您的网络配置，确保 Headplane 能够连接。
             </Card.Text>
-            <Card.Text className="mt-4 text-lg font-semibold">Error Details</Card.Text>
+            <Card.Text className="mt-4 text-lg font-semibold">错误详情</Card.Text>
             <pre className="mt-2 overflow-x-auto rounded-lg bg-mist-100 p-2 dark:bg-mist-800">
               {requestUrl}
               <br />
@@ -111,21 +108,21 @@ export function getErrorMessage(error: Error | unknown): {
             </pre>
           </>
         ),
-        title: "Cannot connect to Headscale API",
+        title: "无法连接到 Headscale API",
       };
     }
 
     return {
       jsxMessage: (
         <>
-          There was an error processing your request.
+          处理您的请求时出错。
           <br />
-          Status Code: <strong>{error.status}</strong>
+          状态码: <strong>{error.status}</strong>
           <br />
-          Status Text: <strong>{error.data}</strong>
+          状态文本: <strong>{error.data}</strong>
         </>
       ),
-      title: `Error ${error.status}`,
+      title: `错误 ${error.status}`,
     };
   }
 
@@ -134,20 +131,19 @@ export function getErrorMessage(error: Error | unknown): {
       jsxMessage: (
         <>
           <Card.Text>
-            An unexpected error occurred which is most likely a bug. Please consider reporting
-            filing an issue on the{" "}
+            发生了意外错误，这可能是一个 Bug。请在{" "}
             <Link external styled to="https://github.com/tale/headplane/issues">
               Headplane GitHub
             </Link>{" "}
-            repository with the details below.
+            上提交 Issue，并附上以下详情。
           </Card.Text>
-          <Card.Text className="mt-4 text-lg font-semibold">Error Details</Card.Text>
+          <Card.Text className="mt-4 text-lg font-semibold">错误详情</Card.Text>
           <pre className="mt-2 overflow-x-auto rounded-lg bg-mist-100 p-2 dark:bg-mist-800">
             <code>{JSON.stringify(error, null, 2)}</code>
           </pre>
         </>
       ),
-      title: "Unexpected Error",
+      title: "意外错误",
     };
   }
 

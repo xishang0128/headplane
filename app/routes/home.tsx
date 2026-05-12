@@ -135,15 +135,14 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <Card variant="flat" className="flex max-w-2xl items-center gap-4">
           <Check className="inline-flex size-4" />
           <Card.Text className="text-sm">
-            Your account is linked to Headscale user <strong>{loaderData.linkedUserName}</strong>.
+            您的账户已关联到 Headscale 用户 <strong>{loaderData.linkedUserName}</strong>。
           </Card.Text>
         </Card>
       )}
       <Card variant="flat" className="max-w-2xl">
-        <Card.Title>Access your network via Tailscale</Card.Title>
+        <Card.Title>通过 Tailscale 访问您的网络</Card.Title>
         <Card.Text className="mt-1">
-          You've successfully authenticated but don't have access to the dashboard. You can still
-          connect to your Headscale network by installing Tailscale.
+          您已成功验证身份，但没有访问管理面板的权限。您仍可以通过安装 Tailscale 连接到您的 Headscale 网络。
         </Card.Text>
 
         <div className="mt-4 rounded-lg border border-mist-200 p-3 dark:border-mist-700">
@@ -158,7 +157,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               styled
               to="https://github.com/tailscale/tailscale/blob/main/scripts/installer.sh"
             >
-              View script source
+              查看脚本源码
             </Link>
           </p>
         </div>
@@ -194,8 +193,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           )}
         >
           {loaderData.unlinked
-            ? "Your account isn't linked to a Headscale user. Ask your administrator to create one for you."
-            : "Need access to the dashboard? Contact your administrator to request access."}
+            ? "您的账户未关联到 Headscale 用户。请联系管理员为您创建账户。"
+            : "需要访问管理面板？请联系管理员申请访问权限。"}
         </Card.Text>
       </Card>
     </div>

@@ -116,11 +116,10 @@ export default function AppLayout({ loaderData }: Route.ComponentProps) {
           <StatusBanner
             className="mb-4"
             dismissable={false}
-            title="Headscale Unreachable"
+            title="Headscale 不可达"
             variant="critical"
           >
-            Unable to connect to the Headscale server. Data shown may be stale and changes cannot be
-            saved until the connection is restored.
+            无法连接到 Headscale 服务器。显示的数据可能不是最新的，在连接恢复之前无法保存更改。
           </StatusBanner>
         )}
         <Outlet />

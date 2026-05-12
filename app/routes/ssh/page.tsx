@@ -119,14 +119,14 @@ export default function Page({ loaderData }: Route.ComponentProps) {
       <div className="flex h-screen w-screen items-center justify-center bg-black">
         <Card className="w-screen" variant="flat">
           <div className="flex items-center justify-between gap-4">
-            <Card.Title>Node Offline</Card.Title>
+            <Card.Title>节点离线</Card.Title>
             <WifiOff className="mb-2 h-6 w-6 text-red-500" />
           </div>
           <Card.Text>
-            <Code>{hostname}</Code> is not currently connected to the Tailnet.
+            <Code>{hostname}</Code> 当前未连接到 Tailnet。
           </Card.Text>
           <Button className="mt-8 w-full" onClick={() => window.location.reload()}>
-            Retry Connection
+            重试连接
           </Button>
         </Card>
       </div>
@@ -151,7 +151,7 @@ function SSHConsole({
 }) {
   const [ssh, setSsh] = useState<HeadplaneSSH | null>(null);
   const [connected, setConnected] = useState(false);
-  const [status, setStatus] = useState("Starting tunnel…");
+  const [status, setStatus] = useState("正在启动隐道…");
 
   useEffect(() => {
     let cancelled = false;
@@ -164,7 +164,7 @@ function SSHConsole({
         return;
       }
 
-      setStatus("Joining Tailnet…");
+      setStatus("正在加入 Tailnet…");
       const instance = create({
         controlURL: node.controlURL,
         preAuthKey: node.preAuthKey,
@@ -172,7 +172,7 @@ function SSHConsole({
         onReady: () => {
           console.log("[ssh] IPN ready (Running)");
           if (!cancelled) {
-            setStatus(`Connecting to ${hostname}…`);
+            setStatus(`正在连接到 ${hostname}…`);
             setSsh(instance);
           }
         },

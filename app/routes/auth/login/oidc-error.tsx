@@ -7,7 +7,7 @@ export function OidcErrorNotice({ code }: { code: string }) {
   return (
     <Card className="m-4 mb-4 max-w-md border border-red-500 sm:m-0 sm:mb-4">
       <div className="flex items-center justify-between gap-4">
-        <Card.Title className="text-red-500">Configuration Issue(s)</Card.Title>
+        <Card.Title className="text-red-500">配置问题</Card.Title>
         <AlertCircle className="mb-2 h-6 w-6 text-red-500" />
       </div>
       {getErrorMessage(code)}
@@ -20,8 +20,7 @@ function getErrorMessage(code: string) {
     case "error_no_query":
       return (
         <Card.Text>
-          The SSO provider did not correctly redirect back to Headplane with the required
-          parameters. Please ensure your SSO provider is configured correctly.
+          SSO 提供商未正确地将必要参数重定向到 Headplane。请确保您的 SSO 提供商已正确配置。
         </Card.Text>
       );
 
@@ -29,31 +28,28 @@ function getErrorMessage(code: string) {
     case "error_invalid_session":
       return (
         <Card.Text>
-          Unable to complete SSO login due to missing or invalid session data. Ensure that your
-          Headplane cookie configuration is correct and that your browser is accepting cookies.
+          由于会话数据缺失或无效，无法完成 SSO 登录。请确保 Headplane 的 Cookie 配置正确，且您的浏览器已允许 Cookie。
         </Card.Text>
       );
 
     case "error_no_sub":
       return (
         <Card.Text>
-          The SSO provider did not return a valid user identifier. Please ensure your SSO provider
-          is correctly configured to provide the <Code>sub</Code> claim.
+          SSO 提供商未返回有效的用户标识符。请确保您的 SSO 提供商已正确配置，以提供 <Code>sub</Code> 屘。
         </Card.Text>
       );
 
     case "error_auth_failed":
       return (
         <Card.Text>
-          Authentication with the SSO provider failed. Please try again later. Headplane logs may
-          provide more information.
+          与 SSO 提供商的身份验证失败。请稍后重试。Headplane 日志可能提供更多信息。
         </Card.Text>
       );
 
     default:
       return (
         <Card.Text>
-          An unknown error occurred during OIDC authentication. Please try again later.
+          OIDC 身份验证期间发生未知错误。请稍后重试。
         </Card.Text>
       );
   }

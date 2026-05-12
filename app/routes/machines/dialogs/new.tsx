@@ -35,22 +35,22 @@ export default function NewMachine(data: NewMachineProps) {
     <>
       <Dialog isOpen={pushDialog} onOpenChange={setPushDialog}>
         <DialogPanel isDisabled={!form.canSubmit}>
-          <Title>Register Machine Key</Title>
-          <Text>The machine key is given when you run the following command on your device:</Text>
+          <Title>注册机器密钥</Title>
+          <Text>运行以下命令后将得到机器密钥：</Text>
           <CodeBlock className="mb-4">{`tailscale up --login-server=${data.server}`}</CodeBlock>
           <input name="action_id" type="hidden" value="register" />
           <Input
             {...form.field("register_key")}
             required
-            label="Machine Key"
+            label="机器密钥"
             placeholder="AbCd..."
           />
           <Select
             required
-            label="Owner"
+            label="所有者"
             name="user"
             onValueChange={(v) => form.setValue("user", v)}
-            placeholder="Select a user"
+            placeholder="选择用户"
             items={data.users.map((user) => ({
               value: user.id,
               label: getUserDisplayName(user),
@@ -60,7 +60,7 @@ export default function NewMachine(data: NewMachineProps) {
       </Dialog>
       <Menu disabled={data.isDisabled}>
         <MenuTrigger className="rounded-md bg-indigo-500 px-3.5 py-2 text-sm font-semibold text-white hover:bg-indigo-500/90 dark:bg-indigo-500/90 dark:hover:bg-indigo-500/80">
-          Add Device
+          添加设备
         </MenuTrigger>
         <MenuContent>
           <MenuItem
@@ -69,7 +69,7 @@ export default function NewMachine(data: NewMachineProps) {
           >
             <div className="flex items-center gap-x-3">
               <Computer className="w-4" />
-              Register Machine Key
+              注册机器密钥
             </div>
           </MenuItem>
           <MenuItem
@@ -78,7 +78,7 @@ export default function NewMachine(data: NewMachineProps) {
           >
             <div className="flex items-center gap-x-3">
               <FileKey2 className="w-4" />
-              Generate Pre-auth Key
+              生成预认证密钥
             </div>
           </MenuItem>
         </MenuContent>

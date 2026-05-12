@@ -47,7 +47,7 @@ export default function Page({ loaderData: { access, writable, policy } }: Route
     }
 
     if (fetcher.data.success === true) {
-      toast("Updated policy");
+      toast("策略已更新");
       revalidate();
     }
   }, [fetcher.data]);
@@ -55,55 +55,51 @@ export default function Page({ loaderData: { access, writable, policy } }: Route
   return (
     <div>
       {!access ? (
-        <Notice title="ACL Policy restricted" variant="warning">
-          You do not have the necessary permissions to edit the Access Control List policy. Please
-          contact your administrator to request access or to make changes to the ACL policy.
+        <Notice title="ACL 策略受限" variant="warning">
+          您没有编辑访问控制列表策略的必要权限。请联系您的管理员申请访问权限或对 ACL 策略进行更改。
         </Notice>
       ) : !writable ? (
-        <Notice title="Read-only ACL Policy" variant="error">
-          The ACL policy mode is most likely set to <Code>file</Code> in your Headscale
-          configuration. This means that the ACL file cannot be edited through the web interface. In
-          order to resolve this, you'll need to set <Code>policy.mode</Code> to{" "}
-          <Code>database</Code> in your Headscale configuration.
+        <Notice title="只读 ACL 策略" variant="error">
+          ACL 策略模式可能在 Headscale 配置中设置为 <Code>file</Code>。这意味着 ACL 文件无法通过 Web 界面编辑。如需解决，请将 Headscale 配置中的 <Code>policy.mode</Code> 设置为{" "}
+          <Code>database</Code>。
         </Notice>
       ) : undefined}
-      <h1 className="mb-4 text-2xl font-medium">Access Control List (ACL)</h1>
+      <h1 className="mb-4 text-2xl font-medium">访问控制列表 (ACL)</h1>
       <p className="mb-4 max-w-prose">
-        The ACL file is used to define the access control rules for your network. You can find more
-        information about the ACL file in the{" "}
+        ACL 文件用于定义网络的访问控制规则。您可以在{" "}
         <Link external styled to="https://tailscale.com/kb/1018/acls">
-          Tailscale ACL guide
+          Tailscale ACL 指南
         </Link>{" "}
-        and the{" "}
+        和{" "}
         <Link external styled to="https://headscale.net/stable/ref/acls/">
-          Headscale docs
+          Headscale 文档
         </Link>
-        .
+        中找到更多关于 ACL 文件的信息。
       </p>
       {fetcher.data?.error !== undefined ? (
-        <Notice title={fetcher.data.error.split(":")[0] ?? "Error"} variant="error">
+        <Notice title={fetcher.data.error.split(":")[0] ?? "错误"} variant="error">
           {fetcher.data.error.split(":").slice(1).join(": ") ??
-            "An unknown error occurred while trying to update the ACL policy."}
+            "尝试更新 ACL 策略时发生未知错误。"}
         </Notice>
       ) : undefined}
-      <Tabs className="mb-4" label="ACL Editor" defaultValue="edit">
+      <Tabs className="mb-4" label="ACL 编辑器" defaultValue="edit">
         <TabsList>
           <TabsTab value="edit">
             <div className="flex items-center gap-2">
               <Pencil className="p-1" />
-              <span>Edit file</span>
+              <span>编辑文件</span>
             </div>
           </TabsTab>
           <TabsTab value="diff">
             <div className="flex items-center gap-2">
               <Eye className="p-1" />
-              <span>Preview changes</span>
+              <span>预览更改</span>
             </div>
           </TabsTab>
           <TabsTab value="preview">
             <div className="flex items-center gap-2">
               <FlaskConical className="p-1" />
-              <span>Preview rules</span>
+              <span>预览规则</span>
             </div>
           </TabsTab>
         </TabsList>
@@ -121,8 +117,7 @@ export default function Page({ loaderData: { access, writable, policy } }: Route
           <div className="flex flex-col items-center py-8">
             <Construction />
             <p className="mt-4 w-1/2 text-center">
-              Previewing rules is not available yet. This feature is still in development and is
-              pretty complicated to implement. Hopefully I will be able to get to it soon.
+              规则预览功能暂不可用，该功能仍在开发中，实现起来相对复杂。希望不久能完成。
             </p>
           </div>
         </TabsPanel>
@@ -139,7 +134,7 @@ export default function Page({ loaderData: { access, writable, policy } }: Route
         }}
         variant="heavy"
       >
-        Save
+        保存
       </Button>
       <Button
         disabled={disabled || fetcher.state !== "idle" || codePolicy === policy}
@@ -148,7 +143,7 @@ export default function Page({ loaderData: { access, writable, policy } }: Route
           setCodePolicy(policy);
         }}
       >
-        Discard Changes
+        放弃更改
       </Button>
     </div>
   );
@@ -165,27 +160,23 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
       <div className="flex flex-col gap-4">
         <Card className="max-w-2xl" variant="flat">
           <div className="flex items-center justify-between gap-4">
-            <Card.Title>ACL Policy Unavailable</Card.Title>
+            <Card.Title>ACL 策略不可用</Card.Title>
             <AlertCircle className="mb-2 h-6 w-6 text-red-500" />
           </div>
           <Card.Text>
-            The ACL policy is currently unavailable because the policy file does not exist on the
-            server. This usually indicates that Headscale is running in <Code>file</Code> mode for
-            ACLs, and the specified policy file is missing.
+            ACL 策略目前不可用，因为服务器上的策略文件不存在。这通常意味着 Headscale 正在以 <Code>file</Code> 模式运行 ACL，且指定的策略文件丢失。
           </Card.Text>
         </Card>
         <Card className="max-w-2xl" variant="flat">
           <Card.Text>
-            In order to resolve this issue, there are two possible actions you can take:
+            如需解决此问题，可采取以下两种操作之一：
           </Card.Text>
           <ul className="mt-2 ml-4 list-outside list-disc space-y-1 text-sm">
             <li>
-              Create the ACL policy file at the specified path in your Headscale configuration.
+              在 Headscale 配置中指定的路径创建 ACL 策略文件。
             </li>
             <li>
-              Alternatively, you can switch Headscale to use <Code>database</Code> mode for ACLs by
-              updating your Headscale configuration. This will allow Headplane to manage the ACL
-              policy directly through the web interface.
+              或者，可将 Headscale 切换为使用 <Code>database</Code> 模式管理 ACL，修改 Headscale 配置即可。这将允许 Headplane 通过 Web 界面直接管理 ACL 策略。
             </li>
           </ul>
         </Card>
@@ -193,5 +184,5 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     );
   }
 
-  return <PageError error={error} page="Access Control" />;
+  return <PageError error={error} page="访问控制" />;
 }

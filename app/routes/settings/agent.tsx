@@ -45,11 +45,11 @@ export default function Page({ loaderData }: Route.ComponentProps) {
   if (!loaderData.enabled) {
     return (
       <div className="flex max-w-(--breakpoint-lg) flex-col gap-8">
-        <Title>Headplane Agent</Title>
-        <Notice title="Agent Not Enabled">
-          The Headplane Agent is not enabled. To learn how to set up the agent, visit the{" "}
+        <Title>Headplane 代理</Title>
+        <Notice title="代理未启用">
+          Headplane 代理未启用。如需了解如何配置代理，请查阅{" "}
           <Link external styled to="https://headplane.dev/docs/agent">
-            documentation
+            文档
           </Link>
         </Notice>
       </div>
@@ -61,42 +61,41 @@ export default function Page({ loaderData }: Route.ComponentProps) {
   return (
     <div className="flex max-w-(--breakpoint-lg) flex-col gap-8">
       <div className="flex w-full flex-col sm:w-2/3">
-        <Title>Headplane Agent</Title>
+        <Title>Headplane 代理</Title>
         <Text>
-          The Headplane Agent syncs node information like OS version and connectivity details from
-          your Tailnet.
+          Headplane 代理从您的 Tailnet 同步节点信息，如操作系统版本和连接详情。
         </Text>
       </div>
 
       <div className="flex items-center gap-3">
         <StatusCircle isOnline={!hasError} className="h-5 w-5" />
-        <span className="text-lg font-medium">{hasError ? "Error" : "Healthy"}</span>
+        <span className="text-lg font-medium">{hasError ? "错误" : "正常"}</span>
       </div>
 
       <div className="flex flex-col gap-2">
         <Text>
-          <span className="font-medium">Last synced: </span>
+          <span className="font-medium">最后同步：</span>
           {loaderData.syncedAt ? (
             <span suppressHydrationWarning>{formatTimeDelta(new Date(loaderData.syncedAt))}</span>
           ) : (
-            "Never"
+            "从未"
           )}
         </Text>
         <Text>
-          <span className="font-medium">Nodes synced: </span>
+          <span className="font-medium">已同步节点：</span>
           {loaderData.nodeCount}
         </Text>
       </div>
 
       {loaderData.error ? (
-        <Notice variant="error" title="Sync Error">
+        <Notice variant="error" title="同步错误">
           {loaderData.error}
         </Notice>
       ) : undefined}
 
       <fetcher.Form method="post">
         <Button type="submit" variant="heavy" disabled={isSyncing}>
-          {isSyncing ? "Syncing…" : "Sync Now"}
+          {isSyncing ? "同步中…" : "立即同步"}
         </Button>
       </fetcher.Form>
     </div>

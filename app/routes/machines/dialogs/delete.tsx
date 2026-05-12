@@ -17,10 +17,9 @@ export default function Delete({ machine, isOpen, setIsOpen }: DeleteProps) {
   return (
     <Dialog isOpen={isOpen} onOpenChange={setIsOpen}>
       <DialogPanel onSubmit={() => navigate("/machines")} variant="destructive">
-        <Title>Remove {machine.givenName}</Title>
+        <Title>删除 {machine.givenName}</Title>
         <Text>
-          This machine will be permanently removed from your network. To re-add it, you will need to
-          reauthenticate to your tailnet from the device.
+          此机器将被永久从您的网络中删除。如需重新添加，您需要在设备上重新认证到您的 Tailnet。
         </Text>
         <input name="action_id" type="hidden" value="delete" />
         <input name="node_id" type="hidden" value={machine.id} />

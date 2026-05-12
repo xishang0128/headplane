@@ -80,17 +80,17 @@ function Panel(props: DialogPanelProps) {
         <div className="flex flex-col gap-4">{children}</div>
         <div className="mt-5 flex justify-end gap-3">
           {variant === "unactionable" ? (
-            <AlertDialog.Close render={<Button>Close</Button>} />
+            <AlertDialog.Close render={<Button>关闭</Button>} />
           ) : (
             <>
-              <AlertDialog.Close render={<Button>Cancel</Button>} />
+              <AlertDialog.Close render={<Button>取消</Button>} />
               <AlertDialog.Close ref={closeRef} className="hidden" aria-hidden tabIndex={-1} />
               <Button
                 disabled={isDisabled}
                 type="submit"
                 variant={variant === "destructive" ? "danger" : "heavy"}
               >
-                Confirm
+                确认
               </Button>
             </>
           )}

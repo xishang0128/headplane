@@ -29,27 +29,22 @@ export default function Rename({ machine, magic, isOpen, setIsOpen }: RenameProp
   return (
     <Dialog isOpen={isOpen} onOpenChange={setIsOpen}>
       <DialogPanel>
-        <Title>Edit machine name for {machine.givenName}</Title>
+        <Title>编辑 {machine.givenName} 的机器名称</Title>
         <Text className="mb-6">
-          This name is shown in the admin panel, in Tailscale clients, and used when generating
-          MagicDNS names.
+          此名称显示在管理面板、Tailscale 客户端中，并用于生成 MagicDNS 名称。
         </Text>
         <input name="action_id" type="hidden" value="rename" />
         <input name="node_id" type="hidden" value={machine.id} />
-        <Input {...form.field("name")} required label="Machine name" placeholder="Machine name" />
+        <Input {...form.field("name")} required label="机器名称" placeholder="机器名称" />
         {magic ? (
           name.length > 0 && name !== machine.givenName ? (
             <p className="mt-2 text-sm leading-tight text-mist-600 dark:text-mist-300">
-              This machine will be accessible by the hostname{" "}
-              <Code className="text-sm">{name.toLowerCase().replaceAll(/\s+/g, "-")}</Code>
-              {". "}
-              The hostname <Code className="text-sm">{machine.givenName}</Code> will no longer point
-              to this machine.
+              此机器将可通过主机名 <Code className="text-sm">{name.toLowerCase().replaceAll(/\s+/g, "-")}</Code>
+              {" "}访问。主机名 <Code className="text-sm">{machine.givenName}</Code> 将不再指向此机器。
             </p>
           ) : (
             <p className="mt-2 text-sm leading-tight text-mist-600 dark:text-mist-300">
-              This machine is accessible by the hostname{" "}
-              <Code className="text-sm">{machine.givenName}</Code>.
+              此机器可通过主机名 <Code className="text-sm">{machine.givenName}</Code> 访问。
             </p>
           )
         ) : undefined}

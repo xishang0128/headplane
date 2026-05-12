@@ -24,16 +24,16 @@ export default function AddDomain({ domains, isDisabled }: AddDomainProps) {
       if (domain.length === 0) return undefined;
 
       if (domains.includes(domain)) {
-        return { domain: "This domain already exists in the list." };
+        return { domain: "此域已存在于列表中。" };
       }
 
       try {
         const url = new URL(`http://${domain}`);
         if (url.hostname !== domain) {
-          return { domain: "This is not a valid domain." };
+          return { domain: "这不是有效的域名。" };
         }
       } catch {
-        return { domain: "This is not a valid domain." };
+        return { domain: "这不是有效的域名。" };
       }
 
       return undefined;
@@ -43,25 +43,25 @@ export default function AddDomain({ domains, isDisabled }: AddDomainProps) {
 
   return (
     <Dialog>
-      <Button disabled={isDisabled}>Add domain</Button>
+      <Button disabled={isDisabled}>添加域</Button>
       <DialogPanel>
-        <Title>Add domain</Title>
+        <Title>添加域</Title>
         <Text className="mb-4">
-          Add this domain to a list of allowed email domains that can authenticate with Headscale
-          via OIDC.
+          将此域添加到允许通过 OIDC 向 Headscale 认证的邮箱域列表。
         </Text>
         <input name="action_id" type="hidden" value="add_domain" />
         <Input
           {...form.field("domain")}
           description={
             domain.length > 0
-              ? `Matches users with <user>@${domain}`
-              : "Enter a domain to match users with their email addresses."
+              ? `匹配邮箱为 <user>@${domain} 的用户`
+              : "输入域名以匹配用户的邮箱地址。"
           }
           required
-          label="Domain"
+          label="域"
           placeholder="example.com"
         />
+      </DialogPanel>
       </DialogPanel>
     </Dialog>
   );

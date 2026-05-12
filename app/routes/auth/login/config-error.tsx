@@ -9,12 +9,11 @@ export function OidcDiscoveryFailedNotice() {
   return (
     <Card className="m-4 mb-4 max-w-md border border-yellow-500 sm:m-0 sm:mb-4">
       <div className="flex items-center justify-between gap-4">
-        <Card.Title className="text-yellow-500">SSO Temporarily Unavailable</Card.Title>
+        <Card.Title className="text-yellow-500">SSO 暂时不可用</Card.Title>
         <CloudOff className="mb-2 h-6 w-6 text-yellow-500" />
       </div>
       <Card.Text className="text-sm">
-        Unable to reach the identity provider. Single Sign-On will be available once the provider is
-        reachable again. You can still sign in with an API key.
+        无法连接身份提供商。单一登录将在提供商可达后自动恢复。您现在仍可使用 API 密钥登录。
       </Card.Text>
     </Card>
   );
@@ -24,11 +23,11 @@ export function OidcConfigErrorNotice({ errors }: { errors: OidcErrorCode[] }) {
   return (
     <Card className="m-4 mb-4 max-w-md border border-red-500 sm:m-0 sm:mb-4">
       <div className="flex items-center justify-between gap-4">
-        <Card.Title className="text-red-500">Authentication Error</Card.Title>
+        <Card.Title className="text-red-500">身份验证错误</Card.Title>
         <AlertCircle className="mb-2 h-6 w-6 text-red-500" />
       </div>
       <Card.Text className="text-sm">
-        The OpenID Connect (OIDC) Single Sign-On (SSO) configuration has issues:{" "}
+          OpenID Connect (OIDC) 单一登录 (SSO) 配置存在以下问题：{" "}
         <ul className="mt-2 mb-1 list-inside list-disc">
           {mapOidcErrorsToMessages(errors).map((code) => (
             <li key={code.key}>{code.node}</li>
@@ -55,8 +54,7 @@ function mapOidcErrorsToMessages(errors: OidcErrorCode[]) {
           key: error,
           node: (
             <Card.Text className="inline">
-              The provided API key for OIDC authentication is invalid. Ensure that{" "}
-              <Code>headscale.api_key</Code> is a valid API key.
+              提供的 OIDC 身份验证 API 密钥无效。请确保 <Code>headscale.api_key</Code> 是有效的 API 密钥。
             </Card.Text>
           ),
         });
@@ -68,8 +66,7 @@ function mapOidcErrorsToMessages(errors: OidcErrorCode[]) {
           key: error,
           node: (
             <Card.Text className="inline">
-              The OIDC provider is missing required endpoints. Ensure the discovery URL is correct
-              or provide manual endpoint overrides in your configuration.
+              OIDC 提供商缺少必要的端点。请确保发现 URL 正确，或在配置中手动指定端点覆盖。
             </Card.Text>
           ),
         });
@@ -81,8 +78,7 @@ function mapOidcErrorsToMessages(errors: OidcErrorCode[]) {
           key: error,
           node: (
             <Card.Text className="inline">
-              Unable to reach the OIDC provider for discovery. SSO will retry on the next login
-              attempt.
+              无法连接 OIDC 提供商以完成发现。SSO 将在下次登录时重试。
             </Card.Text>
           ),
         });
@@ -94,12 +90,10 @@ function mapOidcErrorsToMessages(errors: OidcErrorCode[]) {
           key: error,
           node: (
             <Card.Text className="inline">
-              An unknown OIDC configuration error occurred. Please check the Headplane logs for more
-              information.
+              发生未知 OIDC 配置错误。请查看 Headplane 日志以获取更多信息。
             </Card.Text>
           ),
         });
-        break;
       }
     }
   }

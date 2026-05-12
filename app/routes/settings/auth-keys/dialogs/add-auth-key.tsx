@@ -89,14 +89,14 @@ export default function AddAuthKey({
       }}
     >
       <Button className="my-4" onClick={() => setIsOpen(true)}>
-        Create pre-auth key
+        创建预认证密钥
       </Button>
       {createdKey ? (
         <DialogPanel variant="unactionable">
-          <Title>Pre-auth key created</Title>
-          <Text>Copy this key now. You will not be able to see the full key again.</Text>
+          <Title>预认证密钥已创建</Title>
+          <Text>请立即复制此密钥。稍候将无法再次查看完整密钥。</Text>
           <CodeBlock className="mt-4">{createdKey}</CodeBlock>
-          <Text className="mt-4 text-sm">To register a device with this key:</Text>
+          <Text className="mt-4 text-sm">使用此密钥注册设备：</Text>
           <CodeBlock className="mt-1">
             {`tailscale up --login-server=${url} --authkey ${createdKey}`}
           </CodeBlock>
@@ -116,17 +116,17 @@ export default function AddAuthKey({
           }}
           isDisabled={fetcher.state !== "idle" || !canSubmit}
         >
-          <Title>Generate auth key</Title>
+          <Title>生成认证密钥</Title>
 
           {!selfServiceOnly && (
             <div className="mb-4 flex items-center justify-between gap-2">
               <div>
-                <Text className="font-semibold">Tag-only key</Text>
-                <Text className="text-sm">Create a key owned by ACL tags instead of a user.</Text>
+                <Text className="font-semibold">仅标签密钥</Text>
+                <Text className="text-sm">创建属于 ACL 标签而非用户的密钥。</Text>
               </div>
               <Switch
                 defaultChecked={tagOnly}
-                label="Tag-only"
+                label="仅标签"
                 onCheckedChange={() => setTagOnly(!tagOnly)}
               />
             </div>
@@ -137,14 +137,14 @@ export default function AddAuthKey({
               className="mb-2"
               description={
                 selfServiceOnly
-                  ? "You can only create keys for your own user."
-                  : "Machines will belong to this user when they authenticate."
+                  ? "您只能为自己的用户创建密钥。"
+                  : "设备在认证时将属于这个用户。"
               }
               disabled={selfServiceOnly}
               required
-              label="User"
+              label="用户"
               onValueChange={(value) => setUserId(value)}
-              placeholder="Select a user"
+              placeholder="选择用户"
               value={userId}
               items={availableUsers.map((user) => ({
                 value: user.id,
@@ -155,47 +155,46 @@ export default function AddAuthKey({
 
           <Input
             className="mb-2"
-            description="Comma-separated tags (e.g. server, prod). The tag: prefix is added automatically."
+            description="逗号分隔的标签（如 server, prod）。tag: 前缀将自动添加。"
             required={tagOnly}
-            label="ACL Tags"
+            label="ACL 标签"
             onChange={(value) => setTags(value)}
             placeholder="server, prod"
             value={tags}
           />
           <NumberInput
             defaultValue={90}
-            description="Set this key to expire after a certain number of days."
+            description="设置此密钥将在小数天后过期。"
             required
-            label="Key Expiration"
+            label="密钥过期"
             max={365_000}
             min={1}
             name="expiry"
           />
           <div className="mt-6 flex items-center justify-between gap-2">
             <div>
-              <Text className="font-semibold">Reusable</Text>
-              <Text className="text-sm">Use this key to authenticate more than one device.</Text>
+              <Text className="font-semibold">可复用</Text>
+              <Text className="text-sm">使用此密钥认证多个设备。</Text>
             </div>
             <Switch
               defaultChecked={reusable}
-              label="Reusable"
+              label="可复用"
               onCheckedChange={() => setReusable(!reusable)}
             />
           </div>
           <div className="mt-6 flex items-center justify-between gap-2">
             <div>
-              <Text className="font-semibold">Ephemeral</Text>
+              <Text className="font-semibold">临时</Text>
               <Text className="text-sm">
-                Devices authenticated with this key will be automatically removed once they go
-                offline.{" "}
+                使用此密钥认证的设备离线后将被自动删除。{" "}
                 <Link external styled to="https://tailscale.com/kb/1111/ephemeral-nodes">
-                  Learn more
+                  了解更多
                 </Link>
               </Text>
             </div>
             <Switch
               defaultChecked={ephemeral}
-              label="Ephemeral"
+              label="临时"
               onCheckedChange={() => setEphemeral(!ephemeral)}
             />
           </div>

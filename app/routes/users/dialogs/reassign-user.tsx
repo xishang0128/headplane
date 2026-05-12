@@ -25,21 +25,20 @@ export default function ReassignUser({
   return (
     <Dialog isOpen={isOpen} onOpenChange={setIsOpen}>
       <DialogPanel variant={role === "owner" ? "unactionable" : "normal"}>
-        <Title>Change role for {displayName}?</Title>
+        <Title>更改 {displayName} 的角色？</Title>
         <Text className="mb-6">
-          Roles control what the user can access in Headplane. Each role grants a specific set of
-          capabilities.{" "}
+          角色控制用户在 Headplane 中可访问的内容。每个角色授予特定的能力集合。{" "}
           <Link external styled to="https://tailscale.com/kb/1138/user-roles">
-            Learn More
+            了解更多
           </Link>
         </Text>
         {role === "owner" ? (
-          <Notice>The Tailnet owner cannot be reassigned.</Notice>
+          <Notice>Tailnet 所有者不能被重新分配。</Notice>
         ) : (
           <>
             <input name="action_id" type="hidden" value="reassign_user" />
             <input name="user_id" type="hidden" value={userId} />
-            <RadioGroup className="gap-4" defaultValue={role} label="Role" name="new_role">
+            <RadioGroup className="gap-4" defaultValue={role} label="角色" name="new_role">
               {Object.keys(Roles)
                 .filter((r) => r !== "owner")
                 .map((r) => {
@@ -65,38 +64,38 @@ function mapRoleToName(role: string) {
   switch (role) {
     case "admin":
       return {
-        name: "Admin",
-        desc: "Can view the admin console, manage network, machine, and user settings.",
+        name: "管理员",
+        desc: "可查看管理控制台，管理网络、机器和用户设置。",
       };
     case "network_admin":
       return {
-        name: "Network Admin",
-        desc: "Can view the admin console and manage ACLs and network settings. Cannot manage machines or users.",
+        name: "网络管理员",
+        desc: "可查看管理控制台并管理 ACL 和网络设置。不能管理机器或用户。",
       };
     case "it_admin":
       return {
-        name: "IT Admin",
-        desc: "Can view the admin console and manage machines and users. Cannot manage ACLs or network settings.",
+        name: "IT 管理员",
+        desc: "可查看管理控制台并管理机器和用户。不能管理 ACL 或网络设置。",
       };
     case "auditor":
       return {
-        name: "Auditor",
-        desc: "Can view the admin console.",
+        name: "审计员",
+        desc: "可查看管理控制台。",
       };
     case "viewer":
       return {
-        name: "Viewer",
-        desc: "Can view machines, users, and generate their own auth keys.",
+        name: "查看者",
+        desc: "可查看机器、用户，并生成自己的认证密钥。",
       };
     case "member":
       return {
-        name: "Member",
-        desc: "Cannot view the admin console.",
+        name: "成员",
+        desc: "不能查看管理控制台。",
       };
     default:
       return {
         name: role,
-        desc: "No description available.",
+        desc: "暂无描述。",
       };
   }
 }

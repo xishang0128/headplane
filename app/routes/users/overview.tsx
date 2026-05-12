@@ -103,7 +103,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
         machines,
         profilePicUrl: hsUser
           ? resolveProfilePic(hsUser.email, hsUser.profilePicUrl)
-          : resolveProfilePic(hp.email ?? undefined),
+          : resolveProfilePic(hp.email ?? undefined, hp.picture ?? undefined),
       };
     });
 
@@ -171,9 +171,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
       <section>
         <h2 className="mb-3 text-lg font-medium">Headplane 用户</h2>
         {loaderData.headplaneUsers.length === 0 ? (
-          <p className="text-sm text-mist-600 dark:text-mist-300">
-            尚无用户登录过 Headplane。
-          </p>
+          <p className="text-sm text-mist-600 dark:text-mist-300">尚无用户登录过 Headplane。</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px] table-auto rounded-lg">

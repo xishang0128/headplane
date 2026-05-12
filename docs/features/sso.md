@@ -72,6 +72,7 @@ oidc:
   # scope: "openid email profile"
   # subject_claims: ["open_id", "email"]
   # allow_weak_rsa_keys: false
+  # profile_picture_source: "github"
   # extra_params:
   #  foo: "bar"
 ```
@@ -79,6 +80,10 @@ oidc:
 Headplane automatically discovers OIDC endpoints from your issuer's
 `/.well-known/openid-configuration`. If your IdP does not support discovery,
 you'll need to set the endpoints manually.
+
+If you use Dex with the GitHub connector, GitHub may not provide a standard
+OIDC `picture` claim. Set `oidc.profile_picture_source` to `"github"` to build
+profile pictures from the forwarded GitHub username.
 
 ### Non-standard Subject Claims
 

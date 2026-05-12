@@ -25,7 +25,7 @@ export interface OidcConfig {
   subjectClaims?: string[];
   allowWeakRsaKeys?: boolean;
   extraParams?: Record<string, string>;
-  profilePictureSource?: "oidc" | "gravatar";
+  profilePictureSource?: "oidc" | "gravatar" | "github";
   postLogoutRedirectUri?: string;
 }
 
@@ -136,6 +136,14 @@ interface WeakRsaContext {
   alg: "RS256" | "RS384" | "RS512";
   decoded: DecodedJwtParts;
   candidateKeys: Array<JsonWebKey & { kid?: string }>;
+}
+
+function getGithubAvatarUrl(username?: string): string | undefined {
+  if (!username || !/^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$/.test(username)) {
+    return undefined;
+  }
+
+  return `https://github.com/${username}.png`;
 }
 
 export function createOidcService(initialConfig: OidcConfig): OidcService {
@@ -695,7 +703,12 @@ export function createOidcService(initialConfig: OidcConfig): OidcService {
     const needsEnrichment =
       !claims.name && !claims.email && !claims.picture && !!resolveSubject(claims);
     const needsSubjectEnrichment = !resolveSubject(claims);
-    if ((!needsEnrichment && !needsSubjectEnrichment) || !ep.userinfoEndpoint) {
+    const needsGithubUsername =
+      config.profilePictureSource === "github" && !claims.preferred_username;
+    if (
+      (!needsEnrichment && !needsSubjectEnrichment && !needsGithubUsername) ||
+      !ep.userinfoEndpoint
+    ) {
       return claims;
     }
 
@@ -765,6 +778,8 @@ export function createOidcService(initialConfig: OidcConfig): OidcService {
         const hash = createHash("sha256").update(claims.email.trim().toLowerCase()).digest("hex");
         picture = `https://www.gravatar.com/avatar/${hash}?s=200&d=identicon&r=x`;
       }
+    } else if (config.profilePictureSource === "github") {
+      picture = getGithubAvatarUrl(claims.preferred_username) ?? claims.picture;
     } else {
       picture = claims.picture;
     }

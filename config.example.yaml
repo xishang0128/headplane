@@ -230,8 +230,10 @@ integration:
 #
 #   # By default profile pictures are pulled from the OIDC provider when
 #   # we go to fetch the userinfo endpoint. Optionally, this can be set to
-#   # "oidc" or "gravatar" as of 0.6.1.
-#   profile_picture_source: "gravatar"
+#   # "oidc", "gravatar", or "github".
+#   # For Dex with the GitHub connector, use "github" to derive avatars from
+#   # the GitHub username claim.
+#   profile_picture_source: "github"
 #
 #   # The scopes to request when authenticating users. The default is below.
 #   scope: "openid email profile"

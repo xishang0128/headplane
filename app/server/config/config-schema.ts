@@ -117,7 +117,7 @@ const oidcConfig = type({
   scope: 'string = "openid email profile"',
   subject_claims: type("string[]").pipe(normalizeStringArray).optional(),
   allow_weak_rsa_keys: "boolean = false",
-  profile_picture_source: '"oidc" | "gravatar" = "oidc"',
+  profile_picture_source: '"oidc" | "gravatar" | "github" = "oidc"',
   extra_params: "Record<string, string>?",
 
   authorization_endpoint: "string.url?",
@@ -145,7 +145,7 @@ const partialOidcConfig = type({
   subject_claims: type("string[]").pipe(normalizeStringArray).optional(),
   allow_weak_rsa_keys: "boolean?",
   extra_params: "Record<string, string>?",
-  profile_picture_source: '"oidc" | "gravatar"?',
+  profile_picture_source: '"oidc" | "gravatar" | "github"?',
 
   authorization_endpoint: "string.url?",
   token_endpoint: "string.url?",

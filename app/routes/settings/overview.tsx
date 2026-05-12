@@ -7,18 +7,18 @@ import type { Route } from "./+types/overview";
 
 export async function loader({ context }: Route.LoaderArgs) {
   return {
-    config: context.hs.writable(),
-    isOidcEnabled: context.oidc?.service.status().state === "ready",
+    isHeadscaleOidcConfigured: context.hs.c?.oidc !== undefined,
   };
 }
 
-export default function Page({ loaderData: { config, isOidcEnabled } }: Route.ComponentProps) {
+export default function Page({ loaderData: { isHeadscaleOidcConfigured } }: Route.ComponentProps) {
   return (
     <div className="flex max-w-(--breakpoint-lg) flex-col gap-8">
       <div className="flex w-full flex-col sm:w-2/3">
         <h1 className="mb-4 text-2xl font-medium">设置</h1>
         <p>
-          设置页面仍在建设中。随着功能新增，将逐步在此展示。如需某项功能，欢迎在 GitHub 仓库提交 issue。
+          设置页面仍在建设中。随着功能新增，将逐步在此展示。如需某项功能，欢迎在 GitHub 仓库提交
+          issue。
         </p>
       </div>
       <div className="flex w-full flex-col sm:w-2/3">
@@ -38,9 +38,7 @@ export default function Page({ loaderData: { config, isOidcEnabled } }: Route.Co
       </Link>
       <div className="flex w-full flex-col sm:w-2/3">
         <h1 className="mb-4 text-2xl font-medium">Headplane 代理</h1>
-        <p>
-          Headplane 代理从您的 Tailnet 同步节点信息，如操作系统版本和连接详情。
-        </p>
+        <p>Headplane 代理从您的 Tailnet 同步节点信息，如操作系统版本和连接详情。</p>
       </div>
       <Link to="/settings/agent">
         <div className="flex items-center text-lg font-medium">
@@ -48,12 +46,13 @@ export default function Page({ loaderData: { config, isOidcEnabled } }: Route.Co
           <ArrowRight className="ml-2 h-5 w-5" />
         </div>
       </Link>
-      {config && isOidcEnabled ? (
+      {isHeadscaleOidcConfigured ? (
         <>
           <div className="flex w-full flex-col sm:w-2/3">
             <h1 className="mb-4 text-2xl font-medium">认证限制</h1>
             <p>
-              Headscale 支持限制 OIDC 认证，仅允许特定邮箱域、组或用户进行认证，限制对您 Tailnet 的访问。Headplane 也尊重这些设置。{" "}
+              Headscale 支持限制 OIDC 认证，仅允许特定邮箱域、组或用户进行认证，限制对您 Tailnet
+              的访问。Headplane 也尊重这些设置。{" "}
               <Link external styled to="https://headscale.net/stable/ref/oidc/#basic-configuration">
                 了解更多
               </Link>

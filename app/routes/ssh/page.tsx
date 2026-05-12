@@ -151,7 +151,7 @@ function SSHConsole({
 }) {
   const [ssh, setSsh] = useState<HeadplaneSSH | null>(null);
   const [connected, setConnected] = useState(false);
-  const [status, setStatus] = useState("正在启动隐道…");
+  const [status, setStatus] = useState("正在启动隧道…");
 
   useEffect(() => {
     let cancelled = false;

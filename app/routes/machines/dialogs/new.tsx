@@ -39,12 +39,7 @@ export default function NewMachine(data: NewMachineProps) {
           <Text>运行以下命令后将得到机器密钥：</Text>
           <CodeBlock className="mb-4">{`tailscale up --login-server=${data.server}`}</CodeBlock>
           <input name="action_id" type="hidden" value="register" />
-          <Input
-            {...form.field("register_key")}
-            required
-            label="机器密钥"
-            placeholder="AbCd..."
-          />
+          <Input {...form.field("register_key")} required label="机器密钥" placeholder="AbCd..." />
           <Select
             required
             label="所有者"
@@ -52,7 +47,7 @@ export default function NewMachine(data: NewMachineProps) {
             onValueChange={(v) => form.setValue("user", v)}
             placeholder="选择用户"
             items={data.users.map((user) => ({
-              value: user.id,
+              value: user.name,
               label: getUserDisplayName(user),
             }))}
           />

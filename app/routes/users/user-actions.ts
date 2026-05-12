@@ -1,6 +1,7 @@
 import { data } from "react-router";
 
 import { usersResource } from "~/server/headscale/live-store";
+import { syncHeadscaleUserProfilePicture } from "~/server/headscale/user-profile-sync";
 import { getOidcSubject } from "~/server/web/headscale-identity";
 import { Capabilities } from "~/server/web/roles";
 import type { Role } from "~/server/web/roles";
@@ -186,6 +187,17 @@ export async function userAction({ request, context }: Route.ActionArgs) {
       const linked = await context.auth.linkHeadscaleUser(userId, headscaleUserId);
       if (!linked) {
         throw data("That Headscale user is already linked to another account.", { status: 409 });
+      }
+
+      if (headplaneUser.picture && headscaleUser.profilePicUrl !== headplaneUser.picture) {
+        const synced = await syncHeadscaleUserProfilePicture(
+          context.hs.c,
+          headscaleUser.id,
+          headplaneUser.picture,
+        );
+        if (synced) {
+          await context.hsLive.refresh(usersResource, api);
+        }
       }
 
       return { message: "Headscale user linked successfully" };

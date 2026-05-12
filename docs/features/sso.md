@@ -85,6 +85,11 @@ If you use Dex with the GitHub connector, GitHub may not provide a standard
 OIDC `picture` claim. Set `oidc.profile_picture_source` to `"github"` to build
 profile pictures from the forwarded GitHub username.
 
+When Headplane can read the Headscale configuration and the Headscale SQLite
+database is writable, the resolved profile picture is also synced to the linked
+Headscale user record. The users page displays the Headscale profile picture
+first and falls back to Headplane's local copy while the sync is unavailable.
+
 ### Non-standard Subject Claims
 
 Some providers do not return the standard OIDC `sub` claim in the ID token.

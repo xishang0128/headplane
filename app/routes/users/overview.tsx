@@ -102,7 +102,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
         linkedHeadscaleUser: hsUser,
         machines,
         profilePicUrl: hsUser
-          ? resolveProfilePic(hsUser.email, hsUser.profilePicUrl)
+          ? resolveProfilePic(hsUser.email, hsUser.profilePicUrl ?? hp.picture ?? undefined)
           : resolveProfilePic(hp.email ?? undefined, hp.picture ?? undefined),
       };
     });

@@ -1,5 +1,7 @@
 import { data, redirect } from "react-router";
 
+import { usersResource } from "~/server/headscale/live-store";
+import { syncHeadscaleUserProfilePicture } from "~/server/headscale/user-profile-sync";
 import { findHeadscaleUserBySubject } from "~/server/web/headscale-identity";
 import log from "~/utils/log";
 import { createOidcStateCookie } from "~/utils/oidc-state";
@@ -58,9 +60,27 @@ export async function loader({ request, context }: Route.LoaderArgs) {
   try {
     const hsApi = context.hsApi.getRuntimeClient(context.headscaleApiKey!);
     const hsUsers = await hsApi.getUsers();
-    const hsUser = findHeadscaleUserBySubject(hsUsers, identity.subject, identity.email);
+    const headplaneUsers = await context.auth.listUsers();
+    const headplaneUser = headplaneUsers.find((user) => user.id === userId);
+    const hsUser =
+      findHeadscaleUserBySubject(hsUsers, identity.subject, identity.email) ??
+      (headplaneUser?.headscale_user_id
+        ? hsUsers.find((user) => user.id === headplaneUser.headscale_user_id)
+        : undefined);
     if (hsUser) {
-      await context.auth.linkHeadscaleUser(userId, hsUser.id);
+      if (headplaneUser?.headscale_user_id !== hsUser.id) {
+        await context.auth.linkHeadscaleUser(userId, hsUser.id);
+      }
+      if (identity.picture && hsUser.profilePicUrl !== identity.picture) {
+        const synced = await syncHeadscaleUserProfilePicture(
+          context.hs.c,
+          hsUser.id,
+          identity.picture,
+        );
+        if (synced) {
+          await context.hsLive.refresh(usersResource, hsApi);
+        }
+      }
     }
   } catch (error) {
     log.warn("auth", "Failed to link Headscale user: %s", String(error));

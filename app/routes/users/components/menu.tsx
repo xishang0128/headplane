@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import { Menu, MenuContent, MenuItem, MenuSeparator, MenuTrigger } from "~/components/menu";
 
+import DeleteHeadplaneUser from "../dialogs/delete-headplane-user";
 import Delete from "../dialogs/delete-user";
 import LinkUser from "../dialogs/link-user";
 import Reassign from "../dialogs/reassign-user";
@@ -17,7 +18,7 @@ interface MenuProps {
   isOwner?: boolean;
 }
 
-type Modal = "delete" | "reassign" | "link" | "transfer" | null;
+type Modal = "delete" | "delete-headplane" | "reassign" | "link" | "transfer" | null;
 
 export default function UserMenu({
   user,
@@ -49,6 +50,17 @@ export default function UserMenu({
             if (!isOpen) setModal(null);
           }}
           user={user.linkedHeadscaleUser}
+        />
+      )}
+      {modal === "delete-headplane" && (
+        <DeleteHeadplaneUser
+          displayName={displayName}
+          isOpen={modal === "delete-headplane"}
+          role={user.role}
+          setIsOpen={(isOpen) => {
+            if (!isOpen) setModal(null);
+          }}
+          userId={user.id}
         />
       )}
       {modal === "reassign" && (
@@ -99,7 +111,7 @@ export default function UserMenu({
           <MenuItem onClick={() => setModal("link")}>
             {isLinked ? "更改关联用户" : "关联 Headscale 用户"}
           </MenuItem>
-          {isOwner && !isSelf && (
+          {isOwner && !isSelf && user.linkedHeadscaleUser && (
             <>
               <MenuSeparator />
               <MenuItem variant="danger" onClick={() => setModal("transfer")}>
@@ -112,6 +124,14 @@ export default function UserMenu({
               <MenuSeparator />
               <MenuItem variant="danger" onClick={() => setModal("delete")}>
                 删除
+              </MenuItem>
+            </>
+          )}
+          {!isSelf && (
+            <>
+              <MenuSeparator />
+              <MenuItem variant="danger" onClick={() => setModal("delete-headplane")}>
+                删除 Headplane 用户
               </MenuItem>
             </>
           )}

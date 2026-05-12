@@ -78,6 +78,7 @@ export interface AuthService {
   linkHeadscaleUser(userId: string, headscaleUserId: string): Promise<boolean>;
   unlinkHeadscaleUser(userId: string): Promise<void>;
   linkHeadscaleUserBySubject(subject: string, headscaleUserId: string): Promise<boolean>;
+  deleteUser(userId: string): Promise<void>;
   listUsers(): Promise<HeadplaneUser[]>;
   claimedHeadscaleUserIds(): Promise<Set<string>>;
   roleForSubject(subject: string): Promise<Role | undefined>;
@@ -387,6 +388,11 @@ export function createAuthService(opts: AuthServiceOptions): AuthService {
     return linkHeadscaleUser(user.id, headscaleUserId);
   }
 
+  async function deleteUser(userId: string): Promise<void> {
+    await opts.db.delete(authSessions).where(eq(authSessions.user_id, userId));
+    await opts.db.delete(users).where(eq(users.id, userId));
+  }
+
   async function listUsers(): Promise<HeadplaneUser[]> {
     return opts.db.select().from(users);
   }
@@ -513,6 +519,7 @@ export function createAuthService(opts: AuthServiceOptions): AuthService {
     linkHeadscaleUser,
     unlinkHeadscaleUser,
     linkHeadscaleUserBySubject,
+    deleteUser,
     listUsers,
     claimedHeadscaleUserIds,
     roleForSubject,

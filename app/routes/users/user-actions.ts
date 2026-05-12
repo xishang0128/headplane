@@ -24,6 +24,32 @@ export async function userAction({ request, context }: Route.ActionArgs) {
     });
   }
 
+  if (action === "delete_headplane_user") {
+    const userId = formData.get("user_id")?.toString();
+    if (!userId) {
+      throw data("Missing `user_id` in the form data.", {
+        status: 400,
+      });
+    }
+
+    if (principal.kind === "oidc" && principal.user.id === userId) {
+      throw data("You cannot delete your own Headplane user.", { status: 403 });
+    }
+
+    const headplaneUsers = await context.auth.listUsers();
+    const user = headplaneUsers.find((user) => user.id === userId);
+    if (!user) {
+      throw data("Specified user not found", { status: 400 });
+    }
+
+    if (user.role === "owner") {
+      throw data("The Headplane owner cannot be deleted.", { status: 403 });
+    }
+
+    await context.auth.deleteUser(userId);
+    return { message: "Headplane user deleted successfully" };
+  }
+
   const apiKey = context.auth.getHeadscaleApiKey(principal);
   const api = context.hsApi.getRuntimeClient(apiKey);
   switch (action) {
